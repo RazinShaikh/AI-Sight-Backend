@@ -193,3 +193,4 @@ db.sqlite3
 # Pretrained models folder
 
 object_detection/od_core/pretrained_models/
+*.pb

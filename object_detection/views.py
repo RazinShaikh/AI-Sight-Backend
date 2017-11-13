@@ -6,19 +6,18 @@ from rest_framework.views import APIView
 
 from .od_core import ai_sight, b64_to_np
 
-class image(APIView):
-	
+# Put your path to models and labels here, just for now.
+PATH_TO_MODEL = ""
+PATH_TO_LABELS = ""
+
+class Image(APIView):
+
+	def __init__(self):
+		ai_sight.__init__(PATH_TO_MODEL, PATH_TO_LABELS, 90)
+
 	@csrf_exempt
 	def post(self, request):
 		data = JSONParser().parse(request)
 		img_np = b64_to_np.load_base64_image_into_numpy_array(data["img"])
-		tmpresult = tmp(img_np)
-		return HttpResponse(tmpresult)
-
-
-def tmp(image_np):
-	testInstance = ai_sight.detection("C:\\Users\\Razin\\Documents\\Level 2\\Software Engineering group project\\project files\\backend\\object_detection\\od_core\\pretrained models\\rfcn_resnet101_coco_11_06_2017\\frozen_inference_graph.pb",
-										"C:\\Users\\Razin\\Documents\\Level 2\\Software Engineering group project\\project files\\backend\\object_detection\\od_core\\labels\\mscoco_label_map.pbtxt"
-										)
-	return testInstance.detect(image_np)
-
+		result = ai_sight.detect(img_np)
+		return HttpResponse(result)
