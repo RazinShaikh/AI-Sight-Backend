@@ -55,6 +55,27 @@ def detect(image_np):
             return boxes, scores, classes, num
 
 
+def get_detection_result(image_np, max_boxes=20, min_score_thresh=0.5):
+
+    boxes_res = []
+    scores_res = []
+    classes_res = []
+
+    boxes, scores, classes, num = detect(image_np)
+
+    boxes = np.squeeze(boxes)
+    scores = np.squeeze(scores)
+    classes = np.squeeze(classes).astype(np.int32)
+
+    for i in range(min(max_boxes, boxes.shape[0])):
+        if scores[i] > min_score_thresh:
+            boxes_res.append(boxes[i])
+            scores_res.append(scores[i])
+            classes_res.append(classes[i])
+
+    return boxes_res, scores_res, classes_res
+
+
 def draw_objects_boxes(image_np):
     boxes, scores, classes, _ = detect(image_np)
 
