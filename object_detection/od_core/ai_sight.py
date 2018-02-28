@@ -60,8 +60,9 @@ def get_detection_result(image_np, max_boxes=20, min_score_thresh=0.5):
     boxes_res = []
     scores_res = []
     classes_res = []
+    display_string = []
 
-    boxes, scores, classes, num = detect(image_np)
+    boxes, scores, classes, _ = detect(image_np)
 
     boxes = np.squeeze(boxes)
     scores = np.squeeze(scores)
@@ -73,7 +74,17 @@ def get_detection_result(image_np, max_boxes=20, min_score_thresh=0.5):
             scores_res.append(scores[i])
             classes_res.append(classes[i])
 
-    return boxes_res, scores_res, classes_res
+            if classes[i] in category_index.keys():
+                class_name = category_index[classes[i]]['name']
+            else:
+                class_name = 'N/A'
+
+            display_str = '{}: {}%'.format(
+                class_name,
+                int(100*scores[i]))
+            display_string.append(display_str)
+
+    return boxes_res, scores_res, classes_res, display_string
 
 
 def draw_objects_boxes(image_np):

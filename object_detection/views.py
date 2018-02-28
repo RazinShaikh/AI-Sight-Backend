@@ -92,8 +92,8 @@ class Img3(APIView):
         img_np = np.array(image_data.getdata()).reshape(
             (im_height, im_width, 3)).astype(np.uint8)
 
-        boxes, scores, classes = ai_sight.get_detection_result(img_np)
+        boxes, scores, classes, display_string = ai_sight.get_detection_result(img_np)
 
-        response = {'boxes': boxes, 'scores': scores, 'classes': classes}
+        response = {'boxes': boxes, 'scores': scores, 'classes': classes, 'display_string': display_string}
 
         return Response(response)
