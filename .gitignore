@@ -194,3 +194,4 @@ db.sqlite3
 
 object_detection/od_core/pretrained_models/
 *.pb
+*.sqlite3

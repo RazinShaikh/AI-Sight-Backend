@@ -1,7 +1,8 @@
 import base64
-import numpy as np
-from PIL import Image
 import io
+import numpy as np
+
+from PIL import Image
 
 
 def base64_image_into_numpy_array(base64_image):
