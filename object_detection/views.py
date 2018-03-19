@@ -8,6 +8,7 @@ from rest_framework.views import APIView
 import io
 import numpy as np
 import os
+import time
 
 from .od_core import ai_sight
 from .od_core import base64_numpy_conversion
@@ -86,13 +87,25 @@ class Img3(APIView):
     @csrf_exempt
     def post(self, request):
         print("request received")
+        t1 = time.time()
         image_data = Image.open(io.BytesIO(request.body))
+        t2 = time.time()
+        print("time to open image: ", t2-t1)
 
         (im_width, im_height) = image_data.size
-        img_np = np.array(image_data.getdata()).reshape(
+        # img_np = np.array(image_data.getdata()).reshape(
+        #     (im_height, im_width, 3)).astype(np.uint8)
+
+        img_np = np.array(image_data).reshape(
             (im_height, im_width, 3)).astype(np.uint8)
 
+        t3 = time.time()
+        print("time to create np array: ", t3-t2)
+
         boxes, scores, classes, display_string = ai_sight.get_detection_result(img_np)
+
+        t4 = time.time()
+        print("total time for detection: ", t4-t3)
 
         response = {'boxes': boxes, 'scores': scores, 'classes': classes, 'display_string': display_string}
 
