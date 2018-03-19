@@ -15,6 +15,11 @@ from .od_core import base64_numpy_conversion
 from ai_sight_backend.settings import BASE_DIR
 
 
+from .od_core import ai_sight
+from .od_core import base64_numpy_conversion
+from ai_sight_backend.settings import BASE_DIR
+
+
 MODEL_NAME = 'ssd_mobilenet_v1_coco_11_06_2017'
 
 PATH_TO_MODEL = os.path.join(BASE_DIR,
