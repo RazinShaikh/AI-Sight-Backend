@@ -47,15 +47,13 @@ class Img(APIView):
     def post(self, request):
 
         data = JSONParser().parse(request)
-        img_np = base64_numpy_conversion.base64_image_into_numpy_array(
-            data["img"])
-        np_img_with_boxes = ai_sight.draw_objects_boxes(img_np)
-        img_b64 = base64_numpy_conversion.numpy_array_to_base64(
-            np_img_with_boxes)
+        img_np = base64_numpy_conversion.base64_image_into_numpy_array(data["img"])
+        boxes, scores, classes, display_string = ai_sight.get_detection_result(img_np)
 
-        response = {'img': img_b64}
+        response = {'boxes': boxes, 'scores': scores, 'classes': classes, 'display_string': display_string}
 
         return Response(response)
+
 
 
 class Img2(APIView):
