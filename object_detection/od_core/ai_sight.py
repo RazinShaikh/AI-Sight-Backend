@@ -108,18 +108,3 @@ def get_detection_result(image_np, max_boxes=20, min_score_thresh=0.5):
 
     return boxes_res, scores_res, classes_res, display_string
 
-
-def draw_objects_boxes(image_np):
-    boxes, scores, classes, _ = detect(image_np)
-
-    vis_util.visualize_boxes_and_labels_on_image_array(
-        image_np,
-        np.squeeze(boxes),
-        np.squeeze(classes).astype(np.int32),
-        np.squeeze(scores),
-        category_index,
-        use_normalized_coordinates=True,
-        line_thickness=30
-    )
-
-    return image_np
