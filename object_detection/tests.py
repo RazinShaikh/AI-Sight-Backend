@@ -1,7 +1,9 @@
 from django.test import TestCase
 from .od_core.base64_numpy_conversion import base64_image_into_numpy_array
+from .od_core import ai_sight
 
 import numpy as np
+from PIL import Image
 
 class ConversionTest(TestCase):
     def test_Image(self):
@@ -15,3 +17,27 @@ class ConversionTest(TestCase):
     def test_Image_Fail(self):
         incorrectString = "SGVsbG8="
         self.assertRaises(Exception, base64_image_into_numpy_array, incorrectString)
+
+class Ai_SightTest(TestCase):
+
+    def setUp(self):
+        self.modelURL = "object_detection/od_core/pretrained_models/ssd_mobilenet_v1_coco_11_06_2017/frozen_inference_graph.pb"
+        self.labelURL = "object_detection/od_core/labels/mscoco_label_map.pbtxt"
+        ai_sight.__init__(self.modelURL, self.labelURL)
+
+    def test_init(self):
+        img = Image.open("object_detection/test_image/test.jpg")
+        (im_width, im_height) = img.size
+        img_np = np.array(img).reshape(
+            (im_height, im_width, 3)).astype(np.uint8)
+
+        boxes, scores, classes, _ = ai_sight.get_detection_result(img_np)
+
+        boxestest = np.array([[0.20688292384147644, 0.02382349967956543, 0.8024313449859619, 0.9165056347846985]])
+        self.assertTrue(np.array_equal(boxes, boxestest))
+        
+        scorestest = np.array([0.9100580811500549])
+        self.assertTrue(np.array_equal(scores, scorestest))
+
+        classestest = np.array([3])
+        self.assertTrue(np.array_equal(classes, classestest))
