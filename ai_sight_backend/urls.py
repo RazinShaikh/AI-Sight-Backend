@@ -4,5 +4,5 @@ from object_detection.views import Img
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
-    url(r'^img/', Img.as_view()),
+    url(r'^img/', Img.as_view(), name="img"),
 ]

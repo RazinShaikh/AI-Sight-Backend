@@ -46,8 +46,13 @@ class Img(APIView):
     @csrf_exempt
     def post(self, request):
 
-        data = JSONParser().parse(request)
-        img_np = base64_numpy_conversion.base64_image_into_numpy_array(data["img"])
+        try:
+            data = JSONParser().parse(request)
+            img_json = data["img"]
+        except (ValueError, KeyError):
+            return Response(status=400)
+        
+        img_np = base64_numpy_conversion.base64_image_into_numpy_array(img_json)
         boxes, scores, classes, display_string = ai_sight.get_detection_result(img_np)
 
         response = {'boxes': boxes, 'scores': scores, 'classes': classes, 'display_string': display_string}

@@ -24,20 +24,21 @@ class Ai_SightTest(TestCase):
         self.modelURL = "object_detection/od_core/pretrained_models/ssd_mobilenet_v1_coco_11_06_2017/frozen_inference_graph.pb"
         self.labelURL = "object_detection/od_core/labels/mscoco_label_map.pbtxt"
         ai_sight.__init__(self.modelURL, self.labelURL)
-
-    def test_init(self):
         img = Image.open("object_detection/test_image/test.jpg")
         (im_width, im_height) = img.size
         img_np = np.array(img).reshape(
             (im_height, im_width, 3)).astype(np.uint8)
 
-        boxes, scores, classes, _ = ai_sight.get_detection_result(img_np)
+        self.boxes, self.scores, self.classes, _ = ai_sight.get_detection_result(img_np)
 
+    def test_boxes(self):
         boxestest = np.array([[0.20688292384147644, 0.02382349967956543, 0.8024313449859619, 0.9165056347846985]])
-        self.assertTrue(np.array_equal(boxes, boxestest))
-        
-        scorestest = np.array([0.9100580811500549])
-        self.assertTrue(np.array_equal(scores, scorestest))
+        self.assertTrue(np.array_equal(self.boxes, boxestest))
 
+    def test_scores(self):
+        scorestest = np.array([0.9100580811500549])
+        self.assertTrue(np.array_equal(self.scores, scorestest))
+
+    def test_classes(self):
         classestest = np.array([3])
-        self.assertTrue(np.array_equal(classes, classestest))
+        self.assertTrue(np.array_equal(self.classes, classestest))
