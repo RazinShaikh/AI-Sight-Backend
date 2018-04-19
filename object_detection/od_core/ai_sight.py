@@ -8,7 +8,7 @@ import time
 
 sys.path.append("..")
 
-from .utils import label_map_util, visualization_utils as vis_util  # noqa
+from .utils import label_map_util # noqa
 
 detection_graph = None
 category_index = None
