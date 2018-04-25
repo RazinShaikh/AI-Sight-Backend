@@ -193,6 +193,6 @@ db.sqlite3
 # Project-wise
 # Pretrained models folder
 
-object_detection/od_core/pretrained_models/
-*.pb
+# object_detection/od_core/pretrained_models/
+# *.pb
 *.sqlite3
