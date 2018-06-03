@@ -9,6 +9,9 @@ import io
 import numpy as np
 import os
 import time
+import base64
+from pytesseract import image_to_string
+from PIL import Image
 
 from .od_core import ai_sight
 from .od_core import base64_numpy_conversion
@@ -56,5 +59,27 @@ class Img(APIView):
         boxes, scores, classes, display_string = ai_sight.get_detection_result(img_np)
 
         response = {'boxes': boxes, 'scores': scores, 'classes': classes, 'display_string': display_string}
+
+        return Response(response)
+
+class Text(APIView):
+
+    renderer_classes = (JSONRenderer, )
+
+    @csrf_exempt
+    def post(self, request):
+
+        try:
+            data = JSONParser().parse(request)
+            img_json = data["img"]
+        except (ValueError, KeyError):
+            return Response(status=400)
+        
+        decoded_img = base64.b64decode(img_json)
+        img = Image.open(io.BytesIO(decoded_img))
+        text = image_to_string(img)
+        print(text)
+
+        response = {'text': text}
 
         return Response(response)
